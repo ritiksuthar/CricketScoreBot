@@ -17,8 +17,14 @@ def main():
 
     print("Bot is running...")
     # Port Configuration for Render Deployment
-    port = int(os.environ.get("PORT", 5000))
-    app.run_polling(port=port)
+    port = int(os.environ.get("PORT", 8443))  # Default HTTPS port
+    webhook_url = f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}/"  # Render-specific domain
 
+    app.run_webhook(
+        listen="0.0.0.0",
+        port=port,
+        url_path=BOT_API_TOKEN,
+        webhook_url=webhook_url + BOT_API_TOKEN
+    )
 if __name__ == "__main__":
     main()
